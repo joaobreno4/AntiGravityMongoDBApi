@@ -7,6 +7,11 @@
     <RootNamespace>AntiGravityMongoDBApi</RootNamespace>
   </PropertyGroup>
 
+  <!-- Exclui microsserviços com projetos próprios da compilação desta API -->
+  <ItemGroup>
+    <Compile Remove="AntiGravityAuditService/**" />
+  </ItemGroup>
+
   <!-- Dependências orbitando e acopladas à API -->
   <ItemGroup>
     <PackageReference Include="MongoDB.Driver" Version="2.25.0" />

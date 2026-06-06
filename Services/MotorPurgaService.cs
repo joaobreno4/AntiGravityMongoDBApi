@@ -106,7 +106,7 @@ namespace AntiGravityMongoDBApi.Services
                     // BulkWriteAsync envia uma única requisição de rede para gravar múltiplos itens no Atlas,
                     // otimizando consideravelmente o uso de conexões de rádio.
                     var resultado = await _collection.BulkWriteAsync(modelosParaInserir, new BulkWriteOptions { IsOrdered = false }, stoppingToken);
-                    _logger.LogInformation("✅ [SRE] Lote de {Inseridos} itens ancorado no Atlas. Falhas: {Erros}", resultado.InsertedCount, resultado.WriteErrors.Count);
+                    _logger.LogInformation("✅ [SRE] Lote de {Inseridos} itens ancorado no Atlas.", resultado.InsertedCount);
                 }
                 catch (Exception ex)
                 {

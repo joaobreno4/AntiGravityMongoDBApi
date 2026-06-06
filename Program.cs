@@ -7,6 +7,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AntiGravityMongoDBApi;
 
 // ============================================================================
 // 🧲 SISTEMA DE ANCORAGEM INICIAL (INICIALIZAÇÃO DO CONTEXTO DE GRAVIDADE ZERO)
@@ -16,10 +17,10 @@ using System.Threading.Tasks;
 var builder = WebApplication.CreateBuilder(args);
 
 // --- CONFIGURAÇÃO DA STRING DE CONEXÃO ORBITAL ---
-// Se o cabo magnético não estiver configurado nas variáveis de ambiente, 
-// conectamos a um cluster de simulação no vácuo.
-var connectionString = builder.Configuration["MongoDB:ConnectionString"] 
-                       ?? "mongodb+srv://astronauta:SenhaEspacial123@cluster-zero-g.abcde.mongodb.net/?retryWrites=true&w=majority";
+// Lê a connection string de IConfiguration (appsettings / variável de ambiente).
+// Nunca armazene credenciais no código-fonte — use secrets ou variáveis de ambiente.
+var connectionString = builder.Configuration.GetConnectionString("MongoDatabase")
+                       ?? "mongodb://localhost:27017/AntiGravityDB";
 
 // --- INJEÇÃO DE DEPENDÊNCIAS (CABOS DE AÇO) ---
 // O contêiner de DI do .NET segura os serviços em seus devidos lugares.
