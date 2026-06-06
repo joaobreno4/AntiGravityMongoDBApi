@@ -1,0 +1,35 @@
+## =======================================================================
+## ESCUDO ANTI-DETRITOS: .gitignore EDITADO PARA .NET / DOCKER / VS CODE
+## =======================================================================
+
+# Pastas de Compilação e Artefatos do .NET (Binários locais)
+**/bin/
+**/obj/
+
+# Logs de Crash e Arquivos de Dump do Sistema
+*.log
+*.dump
+
+# Configurações Locais e Cache de IDEs (VS Code, Visual Studio, JetBrains)
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Arquivos e Volumes Temporários do Docker
+.dockerignore
+**/publish/
+
+# Segredos, Chaves de Ambiente e Arquivos Locais do Atlas / RabbitMQ
+*.env
+*.env.local
+appsettings.Development.json
+
+# Sistema Operacional (Windows / Mac / Linux)
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
