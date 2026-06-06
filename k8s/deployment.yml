@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: antigravity-api
+  namespace: api-antigravity
+  labels:
+    app: antigravity-api
+spec:
+  replicas: 4
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 0%
+  selector:
+    matchLabels:
+      app: antigravity-api
+  template:
+    metadata:
+      labels:
+        app: antigravity-api
+    spec:
+      containers:
+        - name: antigravity-api
+          # A imagem será atualizada automaticamente na esteira de CI com o hash do Git
+          image: DOCKER_IMAGE_PLACEHOLDER
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MongoDB__ConnectionString
+              value: "mongodb://mongodb-local:27017"
+          readinessProbe:
+            httpGet:
+              path: /status
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "250m"
+              memory: "256Mi"

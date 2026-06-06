@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: antigravity-api-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    # URL do repositório contendo as configurações de GitOps
+    repoURL: 'GIT_REPO_PLACEHOLDER'
+    targetRevision: HEAD
+    path: k8s
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: api-antigravity
+  syncPolicy:
+    automated:
+      prune: true      # Remove recursos deletados do Git automaticamente
+      selfHeal: true   # Corrige desvios de configuração inseridos manualmente no cluster
+    syncOptions:
+      - CreateNamespace=true  # Cria o namespace api-antigravity se ele não existir

@@ -1,0 +1,92 @@
+version: '3.8'
+
+# ============================================================================
+# 🐳 ORQUESTRADOR LOCAL (DOCKER COMPOSE): ÓRBITA DE SIMULAÇÃO
+# ============================================================================
+
+services:
+  # --- SERVIÇO DE BANCO DE DADOS LOCAL (MONGODB) ---
+  mongodb-local:
+    image: mongo:6.0
+    container_name: mongodb-local
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: EstacaoDerivaDb
+    volumes:
+      # Persistência de dados físicos no vácuo
+      - dados-mongodb:/data/db
+    networks:
+      - malha-antigravidade
+    healthcheck:
+      # O Kestrel local precisa que o Mongo esteja pronto antes de disparar seus sensores
+      test: ["CMD", "mongosh", "--eval", "db.runCommand({ping:1})"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  # --- SERVIÇO DE API .NET CORE ---
+  antigravity-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: antigravity-api
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      # Sobrescreve as variáveis do appsettings.json. 
+      # O duplo underscore '__' é convertido para o separador ':' do .NET Core (MongoDB:ConnectionString)
+      MongoDB__ConnectionString: mongodb://mongodb-local:27017
+    networks:
+      - malha-antigravidade
+    depends_on:
+      mongodb-local:
+        # Garante que a API só inicialize o container após o banco passar no teste do ping
+        condition: service_healthy
+
+  # --- BROKER DE MENSAGENS (RABBITMQ) ---
+  rabbitmq-broker:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-broker
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672" # Painel de Administração Web
+    networks:
+      - malha-antigravidade
+    healthcheck:
+      # Verifica se o broker RabbitMQ está saudável
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # --- MICROSSERVIÇO DE AUDITORIA ---
+  antigravity-audit-service:
+    build:
+      context: ./AntiGravityAuditService
+      dockerfile: Dockerfile
+    container_name: antigravity-audit-service
+    restart: always
+    environment:
+      RabbitMQ__ConnectionString: amqp://guest:guest@rabbitmq-broker:5672/
+    networks:
+      - malha-antigravidade
+    depends_on:
+      rabbitmq-broker:
+        condition: service_healthy
+
+# --- CONFIGURAÇÃO DE REDE DA ESTAÇÃO ---
+networks:
+  malha-antigravidade:
+    name: malha-antigravidade
+    driver: bridge
+
+# --- CONFIGURAÇÃO DE VOLUMES DE DADOS ---
+volumes:
+  dados-mongodb:
+    name: dados-mongodb
