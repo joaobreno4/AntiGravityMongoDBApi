@@ -39,7 +39,7 @@ services:
     environment:
       # Sobrescreve as variáveis do appsettings.json. 
       # O duplo underscore '__' é convertido para o separador ':' do .NET Core (MongoDB:ConnectionString)
-      MongoDB__ConnectionString: mongodb://mongodb-local:27017
+      ConnectionStrings__MongoDatabase: mongodb://mongodb-local:27017/AntiGravityDB
     networks:
       - malha-antigravidade
     depends_on:
