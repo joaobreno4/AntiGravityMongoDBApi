@@ -1,10 +1,10 @@
-# 🪐 AntiGravityMongoDBApi — Ecossistema de Microsserviços sob Gravidade Zero
+# AntiGravityMongoDBApi — Ecossistema de Microsserviços sob Gravidade Zero
 
 Este repositório contém o código-fonte de um ecossistema de microsserviços tolerante a falhas físicas e sob anomalia gravitacional, construído para demonstrar resiliência técnica, mensageria assíncrona, orquestração local e automação GitOps.
 
 ---
 
-## 🛰️ Arquitetura do Ecossistema (Fluxo de Dados)
+## Arquitetura do Ecossistema (Fluxo de Dados)
 
 O fluxo de captura, mitigação e auditoria de destroços espaciais do DOM funciona conforme o seguinte diagrama:
 
@@ -33,7 +33,7 @@ O fluxo de captura, mitigação e auditoria de destroços espaciais do DOM funci
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 | Tecnologia | Finalidade no Ecossistema | Camada / Módulo |
 | :--- | :--- | :--- |
@@ -48,7 +48,7 @@ O fluxo de captura, mitigação e auditoria de destroços espaciais do DOM funci
 
 ---
 
-## 🛡️ Padrões de Resiliência Implementados
+## Padrões de Resiliência Implementados
 
 * **Filtro de Massa (Load Shedding):** Middleware Kestrel que intercepta payloads físicos. Elementos com massa inferior a 50g são ejetados da thread principal e processados de forma assíncrona, protegendo a API contra estouro de CPU e conexões de rede em picos de colisão.
 * **Motor de Purga (Bulk Operations):** Um worker em segundo plano (`BackgroundService`) drena o buffer em memória e executa gravações em lote no MongoDB Atlas usando `BulkWriteAsync` a cada 5 segundos ou 500 itens, reduzindo I/O de rede.
@@ -57,7 +57,7 @@ O fluxo de captura, mitigação e auditoria de destroços espaciais do DOM funci
 
 ---
 
-## 🚀 Como Executar Localmente
+## Como Executar Localmente
 
 ### 1. Inicializando a Infraestrutura
 Certifique-se de ter o Docker e o Docker Compose instalados em sua máquina. Execute o comando abaixo na raiz do projeto:
